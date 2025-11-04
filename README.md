@@ -1,36 +1,144 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# חבר מחויבות - Admin Dashboard
 
-## Getting Started
+מערכת ניהול מתקדמת לאפליקציית חבר מחויבות. דשבורד אדמין מקיף לניהול משתמשים, קבוצות, סטטיסטיקות והתראות.
 
-First, run the development server:
+## תכונות עיקריות
 
+### 🏠 דשבורד ראשי
+- סקירה כללית של KPIs
+- פעילות אחרונה
+- קבוצות פופולריות
+
+### 👥 ניהול משתמשים
+- טבלת משתמשים עם חיפוש וסינון
+- עריכת פרטי משתמש
+- ניהול הרשאות ותפקידים
+- חסימת/ביטול חסימת משתמשים
+
+### 📊 ניהול קבוצות
+- צפייה בכל הקבוצות
+- ניהול חברי קבוצה
+- סטטיסטיקות קבוצה
+- סינון לפי קטגוריה וסטטוס
+
+### 📈 סטטיסטיקות ואנליטיקה
+- גרפי צמיחת משתמשים
+- נתוני Check-ins יומיים
+- התפלגות קטגוריות
+- Top 10 משתמשים וקבוצות
+
+### 🔔 ניהול התראות
+- שליחת התראות כלליות
+- התראות לקבוצות ספציפיות
+- התראות למשתמשים בודדים
+- היסטוריית התראות
+
+### ⚙️ הגדרות מערכת
+- הגדרות כלליות
+- ניהול קטגוריות
+- תנאי שימוש ומדיניות פרטיות
+- הודעות ברירת מחדל
+
+## טכנולוגיות
+
+- **Frontend**: Next.js 14, TypeScript, Tailwind CSS
+- **UI Components**: Lucide React Icons
+- **Charts**: Recharts
+- **Backend**: Firebase Firestore
+- **Authentication**: Firebase Auth
+
+## התקנה והפעלה
+
+1. **שכפול הפרויקט**
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone <repository-url>
+cd chaver-mechuyvut-dashboard
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. **התקנת תלויות**
+```bash
+npm install
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+3. **הגדרת משתני סביבה**
+```bash
+cp .env.example .env.local
+```
+ערוך את קובץ `.env.local` והוסף את פרטי Firebase שלך.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+4. **הפעלת שרת הפיתוח**
+```bash
+npm run dev
+```
 
-## Learn More
+5. **פתח בדפדפן**
+גש ל-[http://localhost:3000](http://localhost:3000)
 
-To learn more about Next.js, take a look at the following resources:
+## מבנה הפרויקט
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```
+app/
+├── admin/
+│   ├── dashboard/          # דף דשבורד ראשי
+│   ├── users/             # ניהול משתמשים
+│   ├── groups/            # ניהול קבוצות
+│   ├── stats/             # סטטיסטיקות
+│   ├── notifications/     # ניהול התראות
+│   ├── settings/          # הגדרות מערכת
+│   └── layout.tsx         # לייאאוט אדמין
+├── components/
+│   └── Sidebar.tsx        # תפריט ניווט
+├── lib/
+│   └── firebase.ts        # הגדרות Firebase
+└── page.tsx               # דף בית
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## הגדרת Firebase
 
-## Deploy on Vercel
+1. צור פרויקט חדש ב-[Firebase Console](https://console.firebase.google.com)
+2. הפעל Firestore Database
+3. הפעל Authentication
+4. העתק את פרטי הקונפיגורציה לקובץ `.env.local`
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## מבנה Firestore נדרש
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```
+collections:
+├── users
+│   ├── role: string
+│   ├── permissions: array
+│   └── isBlocked: boolean
+├── groups
+├── group_members
+├── daily_checkins
+├── notifications
+├── admin_logs
+├── reports
+└── system_settings
+```
+
+## פיתוח
+
+הפרויקט בנוי עם Next.js 14 ו-App Router. כל דף הוא Server Component עם Client Components לאינטראקטיביות.
+
+### הוספת דף חדש
+1. צור תיקייה חדשה תחת `app/admin/`
+2. הוסף `page.tsx`
+3. עדכן את התפריט ב-`Sidebar.tsx`
+
+### הוספת רכיב חדש
+1. צור קובץ ב-`app/components/`
+2. ייצא כ-default export
+3. השתמש ברכיב בדפים הרלוונטיים
+
+## פריסה
+
+הפרויקט מוכן לפריסה ב-Vercel:
+
+1. חבר את הריפוזיטורי ל-Vercel
+2. הוסף את משתני הסביבה
+3. פרוס
+
+## תמיכה
+
+לשאלות ותמיכה, פנה למפתח הפרויקט.
