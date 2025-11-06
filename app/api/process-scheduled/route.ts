@@ -23,17 +23,17 @@ export async function GET() {
       let tokens: string[] = [];
 
       if (notification.target.type === 'general') {
-        tokens = users.map(u => u.pushToken).filter(t => t);
+        tokens = users.map((u: any) => u.pushToken).filter((t: any) => t);
       } else if (notification.target.type === 'group') {
-        const group = groups.find(g => g.id === notification.target.groupId);
+        const group = groups.find((g: any) => g.id === notification.target.groupId);
         if (group) {
           tokens = users
-            .filter(u => group.memberIds?.includes(u.id))
-            .map(u => u.pushToken)
-            .filter(t => t);
+            .filter((u: any) => group.memberIds?.includes(u.id))
+            .map((u: any) => u.pushToken)
+            .filter((t: any) => t);
         }
       } else if (notification.target.type === 'user') {
-        const user = users.find(u => u.id === notification.target.userId);
+        const user = users.find((u: any) => u.id === notification.target.userId);
         if (user?.pushToken) tokens = [user.pushToken];
       }
 
