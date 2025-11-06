@@ -155,13 +155,14 @@ export default function ModerationPage() {
             פעילות אחרונה
           </h2>
           <div className="space-y-3">
-            {recentActivity.map(activity => {
-              const actionText = {
+            {recentActivity.map((activity: any) => {
+              const actionTypes: Record<string, string> = {
                 'report_approved': 'אישור דוח',
                 'report_rejected': 'דחיית דוח',
                 'user_blocked': 'חסימת משתמש',
                 'user_unblocked': 'ביטול חסימה'
-              }[activity.action] || activity.action;
+              };
+              const actionText = actionTypes[activity.action] || activity.action;
               
               return (
                 <div key={activity.id} className="bg-gray-700 rounded-lg p-4">
