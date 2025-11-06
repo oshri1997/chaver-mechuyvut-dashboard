@@ -34,7 +34,7 @@ export default function UsersPage() {
     try {
       setLoading(true);
       const data = await getAllUsers();
-      const formattedUsers = data.map(user => ({
+      const formattedUsers = data.map((user: any) => ({
         id: user.id,
         name: user.name || 'ללא שם',
         email: user.email || '',

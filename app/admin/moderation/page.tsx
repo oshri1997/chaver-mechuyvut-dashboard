@@ -33,7 +33,7 @@ export default function ModerationPage() {
     setStats({
       totalReports: reports.length,
       pendingReports: reports.filter(r => r.status === 'pending').length,
-      blockedUsers: usersData.filter(u => u.isBlocked).length,
+      blockedUsers: usersData.filter((u: any) => u.isBlocked).length,
       todayActions: reports.filter(r => {
         const today = new Date().setHours(0, 0, 0, 0);
         return r.reviewedAt && r.reviewedAt >= today;

@@ -163,7 +163,7 @@ export default function GroupsPage() {
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">{group.commitmentTime}</td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
                     <div className="flex gap-1">
-                      {group.activeDays.map(day => (
+                      {group.activeDays.map((day: string) => (
                         <span key={day} className="px-1 py-0.5 bg-blue-900 text-blue-300 text-xs rounded">{day}</span>
                       ))}
                     </div>

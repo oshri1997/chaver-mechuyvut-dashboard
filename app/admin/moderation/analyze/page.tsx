@@ -30,12 +30,12 @@ export default function AnalyzeUsersPage() {
     });
 
     const suspicious = usersData
-      .map(user => ({
+      .map((user: any) => ({
         ...user,
         reportCount: userReportCount[user.id] || 0
       }))
-      .filter(user => user.reportCount >= 2 || user.isBlocked)
-      .sort((a, b) => b.reportCount - a.reportCount);
+      .filter((user: any) => user.reportCount >= 2 || user.isBlocked)
+      .sort((a: any, b: any) => b.reportCount - a.reportCount);
 
     setUsers(usersData);
     setSuspiciousUsers(suspicious);

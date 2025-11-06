@@ -49,7 +49,7 @@ export default function NotificationsPage() {
         getAllGroups()
       ]);
       console.log('📊 Loaded users:', usersData.length);
-      console.log('📊 Users with pushToken:', usersData.filter(u => u.pushToken).length);
+      console.log('📊 Users with pushToken:', usersData.filter((u: any) => u.pushToken).length);
       console.log('📊 Loaded groups:', groupsData.length);
       setUsers(usersData);
       setGroups(groupsData);
@@ -99,14 +99,14 @@ export default function NotificationsPage() {
         let tokens: string[] = [];
 
         if (notificationType === 'general') {
-          tokens = users.map(u => u.pushToken).filter(t => t);
+          tokens = users.map((u: any) => u.pushToken).filter((t: any) => t);
         } else if (notificationType === 'group' && targetGroup) {
           const group = groups.find(g => g.id === targetGroup);
           if (group) {
             tokens = users
-              .filter(u => group.memberIds?.includes(u.id))
-              .map(u => u.pushToken)
-              .filter(t => t);
+              .filter((u: any) => group.memberIds?.includes(u.id))
+              .map((u: any) => u.pushToken)
+              .filter((t: any) => t);
           }
         } else if (notificationType === 'user' && targetUser) {
           const user = users.find(u => u.id === targetUser);
