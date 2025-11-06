@@ -1,24 +1,50 @@
 import { db } from './firebase';
 import { collection, getDocs, query, where, orderBy, limit, Timestamp, doc, updateDoc, deleteDoc, addDoc } from 'firebase/firestore';
 
+interface User {
+  id: string;
+  name?: string;
+  groupIds?: string[];
+  createdAt?: number;
+  birthDate?: string;
+  [key: string]: any;
+}
+
+interface Group {
+  id: string;
+  memberIds?: string[];
+  createdAt?: number;
+  category?: string;
+  description?: string;
+  [key: string]: any;
+}
+
+interface CheckIn {
+  id: string;
+  completed?: boolean;
+  date?: string;
+  groupId?: string;
+  [key: string]: any;
+}
+
 // Users
-export async function getAllUsers() {
+export async function getAllUsers(): Promise<User[]> {
   const usersRef = collection(db, 'users');
   const snapshot = await getDocs(usersRef);
   return snapshot.docs.map(doc => ({
     id: doc.id,
     ...doc.data()
-  }));
+  })) as User[];
 }
 
 // Groups
-export async function getAllGroups() {
+export async function getAllGroups(): Promise<Group[]> {
   const groupsRef = collection(db, 'groups');
   const snapshot = await getDocs(groupsRef);
   return snapshot.docs.map(doc => ({
     id: doc.id,
     ...doc.data()
-  }));
+  })) as Group[];
 }
 
 // Group Members
@@ -33,7 +59,7 @@ export async function getGroupMembers(groupId: string) {
 }
 
 // Daily Check-ins
-export async function getDailyCheckIns(date?: string) {
+export async function getDailyCheckIns(date?: string): Promise<CheckIn[]> {
   const checkinsRef = collection(db, 'daily_checkins');
   let q = query(checkinsRef);
   
@@ -45,7 +71,7 @@ export async function getDailyCheckIns(date?: string) {
   return snapshot.docs.map(doc => ({
     id: doc.id,
     ...doc.data()
-  }));
+  })) as CheckIn[];
 }
 
 // User Group Stats
@@ -93,13 +119,13 @@ export async function getDashboardStats() {
   const activeUsers = users.filter(u => u.groupIds && u.groupIds.length > 0);
   
   // Calculate weekly changes
-  const newUsersThisWeek = users.filter(u => u.createdAt >= weekAgo).length;
-  const newUsersLastWeek = users.filter(u => u.createdAt >= twoWeeksAgo && u.createdAt < weekAgo).length;
+  const newUsersThisWeek = users.filter(u => u.createdAt && u.createdAt >= weekAgo).length;
+  const newUsersLastWeek = users.filter(u => u.createdAt && u.createdAt >= twoWeeksAgo && u.createdAt < weekAgo).length;
   const usersDiff = newUsersThisWeek - newUsersLastWeek;
   const usersChangePercent = newUsersLastWeek > 0 ? ((usersDiff / newUsersLastWeek) * 100).toFixed(0) : '0';
 
-  const newGroupsThisWeek = groups.filter(g => g.createdAt >= weekAgo).length;
-  const newGroupsLastWeek = groups.filter(g => g.createdAt >= twoWeeksAgo && g.createdAt < weekAgo).length;
+  const newGroupsThisWeek = groups.filter(g => g.createdAt && g.createdAt >= weekAgo).length;
+  const newGroupsLastWeek = groups.filter(g => g.createdAt && g.createdAt >= twoWeeksAgo && g.createdAt < weekAgo).length;
   const groupsDiff = newGroupsThisWeek - newGroupsLastWeek;
   const groupsChangePercent = newGroupsLastWeek > 0 ? ((groupsDiff / newGroupsLastWeek) * 100).toFixed(0) : '0';
   
@@ -111,8 +137,8 @@ export async function getDashboardStats() {
     activeUsers: activeUsers.length,
     totalGroups: groups.length,
     todayCheckIns: todayCheckins.filter(c => c.completed).length,
-    usersChange: `${usersChangePercent >= 0 ? '+' : ''}${usersChangePercent}%`,
-    groupsChange: `${groupsChangePercent >= 0 ? '+' : ''}${groupsChangePercent}%`,
+    usersChange: `${Number(usersChangePercent) >= 0 ? '+' : ''}${usersChangePercent}%`,
+    groupsChange: `${Number(groupsChangePercent) >= 0 ? '+' : ''}${groupsChangePercent}%`,
     usersDiff,
     groupsDiff
   };
@@ -227,7 +253,7 @@ export async function getStatistics() {
     const year = date.getFullYear();
     const monthStart = new Date(year, month, 1).getTime();
     const monthEnd = new Date(year, month + 1, 0).getTime();
-    const count = users.filter(u => u.createdAt >= monthStart && u.createdAt <= monthEnd).length;
+    const count = users.filter(u => u.createdAt && u.createdAt >= monthStart && u.createdAt <= monthEnd).length;
     userGrowth.push({ month: monthNames[month], users: count });
   }
 
@@ -246,7 +272,7 @@ export async function getStatistics() {
   });
 
   // Categories distribution
-  const categoryCounts: any = {};
+  const categoryCounts: Record<string, number> = {};
   groups.forEach(g => {
     const cat = g.category || 'אחר';
     categoryCounts[cat] = (categoryCounts[cat] || 0) + 1;

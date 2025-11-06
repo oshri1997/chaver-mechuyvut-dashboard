@@ -33,7 +33,7 @@ export async function GET() {
             .filter((t: any) => t);
         }
       } else if (notification.target.type === 'user') {
-        const user = users.find((u: any) => u.id === notification.target.userId);
+        const user: any = users.find((u: any) => u.id === notification.target.userId);
         if (user?.pushToken) tokens = [user.pushToken];
       }
 
