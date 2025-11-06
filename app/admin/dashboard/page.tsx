@@ -109,13 +109,15 @@ export default function Dashboard() {
           <h3 className="text-lg font-semibold text-white mb-4">פעילות אחרונה</h3>
           <div className="space-y-4">
             {recentActivity.length > 0 ? recentActivity.map((activity, index) => {
-              const actionText = {
-                'user_joined': 'משתמש חדש נרשם',
+              const actionTypes: Record<string, string> = {
+                'user_registered': 'משתמש חדש נרשם',
+                'user_joined': 'משתמש הצטרף לקבוצה',
                 'group_created': 'קבוצה חדשה נוצרה',
                 'checkin': 'Check-in בוצע',
                 'encouragement': 'עידוד נשלח',
                 'user_left': 'משתמש עזב קבוצה'
-              }[activity.type] || activity.type;
+              };
+              const actionText = actionTypes[activity.type] || activity.type;
               
               const timeAgo = Math.floor((Date.now() - activity.timestamp) / 60000);
               const timeText = timeAgo < 60 ? `${timeAgo} דקות` : `${Math.floor(timeAgo / 60)} שעות`;
