@@ -25,7 +25,7 @@ export async function GET() {
       if (notification.target.type === 'general') {
         tokens = users.map((u: any) => u.pushToken).filter((t: any) => t);
       } else if (notification.target.type === 'group') {
-        const group = groups.find((g: any) => g.id === notification.target.groupId);
+        const group: any = groups.find((g: any) => g.id === notification.target.groupId);
         if (group) {
           tokens = users
             .filter((u: any) => group.memberIds?.includes(u.id))
