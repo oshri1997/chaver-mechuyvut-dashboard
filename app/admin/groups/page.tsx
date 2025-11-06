@@ -26,7 +26,7 @@ export default function GroupsPage() {
     try {
       setLoading(true);
       const data = await getAllGroups();
-      const formattedGroups = data.map(group => {
+      const formattedGroups = data.map((group: any) => {
         const members = group.memberIds?.length || 0;
         const maxMembers = group.maxMembers || 6;
         return {
