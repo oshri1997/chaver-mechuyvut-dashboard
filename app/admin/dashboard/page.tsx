@@ -23,7 +23,6 @@ export default function Dashboard() {
           getRecentActivity(4),
           getPopularGroups(4)
         ]);
-        console.log('Stats data:', statsData);
         setStats(statsData);
         setRecentActivity(activityData);
         setPopularGroups(groupsData);

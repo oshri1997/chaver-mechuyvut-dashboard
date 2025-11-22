@@ -24,8 +24,18 @@ export default function LoginPage() {
       } else {
         setError('אימייל או סיסמה שגויים, או שאין לך הרשאות אדמין');
       }
-    } catch (err) {
-      setError('שגיאה בהתחברות. נסה שוב.');
+    } catch (err: any) {
+      if (err?.code === 'auth/invalid-credential') {
+        setError('אימייל או סיסמה שגויים');
+      } else if (err?.code === 'auth/user-not-found') {
+        setError('משתמש לא קיים');
+      } else if (err?.code === 'auth/wrong-password') {
+        setError('סיסמה שגויה');
+      } else if (err?.code === 'permission-denied') {
+        setError('אין לך הרשאות אדמין');
+      } else {
+        setError('שגיאה בהתחברות. נסה שוב.');
+      }
     } finally {
       setLoading(false);
     }

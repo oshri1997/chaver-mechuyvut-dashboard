@@ -129,9 +129,6 @@ export async function getDashboardStats() {
   const groupsDiff = newGroupsThisWeek - newGroupsLastWeek;
   const groupsChangePercent = newGroupsLastWeek > 0 ? ((groupsDiff / newGroupsLastWeek) * 100).toFixed(0) : '0';
   
-  console.log('Groups this week:', newGroupsThisWeek, 'Last week:', newGroupsLastWeek, 'Diff:', groupsDiff);
-  console.log('Users this week:', newUsersThisWeek, 'Last week:', newUsersLastWeek, 'Diff:', usersDiff);
-  
   const result = {
     totalUsers: users.length,
     activeUsers: activeUsers.length,
@@ -143,7 +140,6 @@ export async function getDashboardStats() {
     groupsDiff
   };
   
-  console.log('Returning stats:', result);
   return result;
 }
 

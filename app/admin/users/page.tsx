@@ -36,6 +36,7 @@ export default function UsersPage() {
       const data = await getAllUsers();
       const formattedUsers = data.map((user: any) => ({
         id: user.id,
+        authId: user.authId,
         name: user.name || 'ללא שם',
         email: user.email || '',
         age: user.birthDate ? new Date().getFullYear() - new Date(user.birthDate).getFullYear() : 0,

@@ -2,7 +2,6 @@
 
 import { useState } from 'react';
 import { X } from 'lucide-react';
-import { deleteUser } from '../lib/firestore';
 
 interface DeleteUserModalProps {
   user: any;
@@ -16,7 +15,14 @@ export default function DeleteUserModal({ user, onClose, onSuccess }: DeleteUser
   const handleDelete = async () => {
     setLoading(true);
     try {
-      await deleteUser(user.id);
+      const response = await fetch('/api/users/delete', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userId: user.id, authId: user.authId || user.id })
+      });
+      
+      if (!response.ok) throw new Error('Failed to delete user');
+      
       onSuccess();
       onClose();
     } catch (error) {
